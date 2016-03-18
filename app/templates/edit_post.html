@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Blog of Wenyi Zhao - 编辑文章{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    #flask-pagedown-body {
+        height: 260px;
+    }
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>编辑文章</h1>
+</div>
+<div>
+    {{ wtf.quick_form(form) }}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

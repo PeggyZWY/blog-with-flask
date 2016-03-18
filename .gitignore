@@ -1,3 +1,5 @@
-pre/
+venv/
+migrations/
 
+*.sqlite
 *.pyc

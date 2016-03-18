@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Blog of Wenyi Zhao - 文章{% endblock %}
+
+{% block head %}
+{{ super() }}
+<style type="text/css">
+    #flask-pagedown-body {
+        height: 260px;
+    }
+</style>
+{% endblock %}
+
+{% block page_content %}
+
+{% include '_posts.html' %}
+
+<h3 id="comments">评论</h3>
+{% if current_user.can(Permission.COMMENT) %}
+
+<div class="comment-form">
+    {{ wtf.quick_form(form) }}
+</div>
+
+{# <div>
+    {{ form.body.label }} {{ form.body(class="yiyi-comment-body") }} 
+    {{ form.submit() }}
+</div> #}
+
+{% else %}
+<a href="{{ url_for('auth.login') }}" class="btn btn-primary">登陆后评论</a>
+<a href="{{ url_for('auth.register') }}" class="btn btn-default">注册</a>
+{% endif %}
+
+{% include '_comments.html' %}
+
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.post', fragment='#comments', id=posts[0].id) }}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

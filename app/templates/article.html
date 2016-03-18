@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+<!-- pagination_widget 宏可放在 index.html 和 user.html 中的 _posts.html 模板后面 -->
+{% import "_macros.html" as macros %}
+
+{% block title %}Blog of Wenyi Zhao - 文章{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+<style type="text/css">
+    #flask-pagedown-body {
+        height: 260px;
+    }
+</style>
+{% endblock %}
+
+{% block page_content %}
+<div class="write-article-body">
+    {% if current_user.can(Permission.WRITE_ARTICLES) %}
+    <button id="toggle-write-article" class="btn btn-primary">显示/隐藏文章编辑</button>
+    <div class="form-write-article">
+        {{ wtf.quick_form(form) }}
+    </div>        
+    {% endif %}
+</div>
+
+{% include '_posts.html' %}
+
+{% if pagination %}
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, '.article') }}
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+<script type="text/javascript">
+$(document).ready(function(){
+  $(".form-write-article").hide();
+  $("#toggle-write-article").click(function(){
+    $(".form-write-article").toggle(200);
+  });
+});
+</script>
+{% endblock %}

@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Blog of Wenyi Zhao - 登陆{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    <h1>登陆</h1>
+</div>
+<div class="col-md-4">
+    <!-- 这个模板只需使用 Flask-Bootstrap 提供的 wtf.quick_form() 宏渲染表单即可 -->
+    {{ wtf.quick_form(form) }}
+    <br />
+    <p>
+        > 还没有账号？
+        <a href="{{ url_for('auth.register') }}">
+            立即注册
+        </a>
+    </p>
+</div>
+{% endblock %}

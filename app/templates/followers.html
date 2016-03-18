@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+{% import "_macros.html" as macros %}
+
+{% block title %}Blog of Wenyi Zhao - {{ title }} {{ user.username }}{% endblock %}
+
+{% block head %}
+{{ super() }}
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+{% endblock %}
+
+{% block page_content %}
+<div class="page-header">
+    {% if endpoint=='.followers' %}<h1>{{ title }} {{ user.username }}</h1>{% endif %}
+    {% if endpoint=='.followed_by' %}<h1>{{ user.username }} {{ title }}</h1>{% endif %}
+</div>
+<!-- followers.html 模板使用两列表格实现,左边一列用于显示用户名和头像,右边一列用于显 示 Flask-Moment 时间戳。 -->
+<table class="table table-hover followers">
+    <thead><tr>
+        <th>用户</th>
+        <th>自</th>
+    </tr></thead>
+    {% for follow in follows %}
+    <!-- 注册时把用户设为自己的关注者,在模板里用条件语句调整关注用户和被关注用户的列表，不显示自己 -->
+    {% if follow.user != user %}
+    <tr>
+        <td>
+            <a href="{{ url_for('.user', username = follow.user.username) }}">
+                <img class="img-rounded followers-avatar" src="{{ follow.user.avatar() }}">
+                {{ follow.user.username }}
+            </a>
+        </td>
+        <td>{{ moment(follow.timestamp).format('L') }}</td>
+    </tr>
+    {% endif %}
+    {% endfor %}
+</table>
+<div class="pagination">
+    {{ macros.pagination_widget(pagination, endpoint, username = user.username) }}
+</div>
+{% endblock %}
