@@ -13,9 +13,11 @@
                  <!-- 如果 post.body_html 字段存在,还要把 post.body 换成 post.body_html -->
                 <h2><a href="{{ url_for('.post', id=post.id, page=-1) }}">{{ post.title }}</a></h2>
                 {% if post.intro %}
-                <big>
+                <p id="quote_l">
+                    <big id="quote_r">
                     {{ post.intro }}
-                </big>
+                    </big>
+                </p>
                 {% endif %}
                 </p>
                 {% if post.body_show %}

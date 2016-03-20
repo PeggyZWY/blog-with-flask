@@ -119,6 +119,14 @@ div.flask-pagedown-preview h3 {
     height: 23px;
 }
 /* _posts.html */
+#quote_l {
+    background: url(../static/quote_l.gif) no-repeat 0px 6px;
+}
+
+#quote_r {
+    padding: 12px;
+    background: url(../static/quote_r.gif) no-repeat right;
+}
 /* 不需要在_posts.html里引入style.css，因为引了_posts.html的posts.html从base.html继承，而后者里面引入了style.css */
 .index-article-avatar {
     width: 38px;
@@ -149,4 +157,7 @@ div.flask-pagedown-preview h3 {
 }
 #flask-pagedown-body {
     height: 260px;
+}
+p {
+    word-wrap: break-word;
 }

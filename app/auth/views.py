@@ -7,7 +7,7 @@ from . import auth
 # 两个点是上层文件夹
 from ..models import User
 # 除了__init__.py那个文件，from 哪里除了一个点或者两个点之外是还要写文件名的
-from .forms import LoginForm, RegistrationForm
+from .forms import LoginForm, RegistrationForm, ChangePasswordForm, PasswordResetRequestForm, PasswordResetForm
 from .. import db, login_manager
 from ..email import send_email
 
@@ -66,8 +66,8 @@ def login():
             用户访问未授权的 URL 时会显示登录表单,Flask-Login 会把原地址保存在查询字符串的 next 参数中,这个参数可从 request.args 字典中读取。 
             如果查询字符串中没有 next 参数,则重定向到首页。
             """
-            return redirect(request.args.get('next') or url_for('main.index'))
-        flash('用户名或密码不正确')
+            return redirect(request.args.get('next') or url_for('main.article'))
+        flash('用户名或密码不正确 ╮(￣▽￣)╭')
     # 当请求类型是 GET 时,视图函数直接渲染模板,即显示表单。因为15行的那个条件判断后为False,根本不会执行
     # 当表单在 POST 请求中提交时, Flask-WTF 中的 validate_on_submit() 函数会验证表单数据,然后尝试登入用户
     return render_template('auth/login.html', form=form)
@@ -139,3 +139,53 @@ def register():
 #     send_email(current_user.email, 'Confirm Your Account', 'auth/email/confirm', user=current_user, token=token)
 #     flash('A new confirmation email has been sent to you by email.')
 #     return redirect(url_for('main.index'))
+
+
+@auth.route('/change-password', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    form = ChangePasswordForm()
+    if form.validate_on_submit():
+        if current_user.verify_password(form.old_password.data):
+            current_user.password = form.password.data
+            db.session.add(current_user)
+            flash('你的密码已更新 (｡・`ω´･)')
+            return redirect(url_for('main.index'))
+        else:
+            flash('当前密码不对 ╮(￣▽￣)╭')
+    return render_template("auth/change_password.html", form=form)
+
+
+@auth.route('/reset', methods=['GET', 'POST'])
+def password_reset_request():
+    if not current_user.is_anonymous:
+        return redirect(url_for('main.index'))
+    form = PasswordResetRequestForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user:
+            token = user.generate_reset_token()
+            send_email(user.email, '重设密码',
+                       'auth/email/reset_password',
+                       user=user, token=token,
+                       next=request.args.get('next'))
+        flash('已向 %s 发送了一封邮件，请从邮件重设你的密码 o(*￣▽￣*)ブ' % form.email.data)
+        return redirect(url_for('auth.login'))
+    return render_template('auth/reset_password.html', form=form)
+
+
+@auth.route('/reset/<token>', methods=['GET', 'POST'])
+def password_reset(token):
+    if not current_user.is_anonymous:
+        return redirect(url_for('main.index'))
+    form = PasswordResetForm()
+    if form.validate_on_submit():
+        user = User.query.filter_by(email=form.email.data).first()
+        if user is None:
+            return redirect(url_for('main.index'))
+        if user.reset_password(token, form.password.data):
+            flash('你的密码已更新 (｡・`ω´･)')
+            return redirect(url_for('auth.login'))
+        else:
+            return redirect(url_for('main.index'))
+    return render_template('auth/reset_password.html', form=form)

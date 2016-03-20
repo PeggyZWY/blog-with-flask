@@ -13,6 +13,20 @@ import sys
 reload(sys)
 sys.setdefaultencoding('utf8')
 
+# 为会出现分类列表的排序做准备，涉及到路由'/post/<int:id>'、'/article'和'/article/<category_name>'
+def sort_category():
+    if Category.query.all():
+        category = Category.query.all()
+        dict = {}
+        for i in category:
+            count = i.posts.count()
+            if count == 0:
+                db.session.delete(i)
+            else:
+                dict[i] = count
+        category = sorted(dict, key=dict.__getitem__, reverse=True)
+        return category
+
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
@@ -122,7 +136,7 @@ def post(id):
         page, per_page=current_app.config['FLASKY_COMMENTS_PER_PAGE'],
         error_out=False)
     comments = pagination.items
-    category = Category.query.all()
+    category = sort_category()
     # 评论列表对象和分页对象都传入了模板,以便渲染。
     return render_template('post.html', posts=[post], form=form, categories=category, comments=comments, pagination=pagination)
     # 评论的渲染过程在新模板 _comments.html 中进行,类似于 _posts.html,但使用的 CSS 类不 同。_comments.html 模板要引入 post.html 中,放在文章正文下方,后面再显示分页导航。
@@ -151,12 +165,14 @@ def edit(id):
         post.intro = form.intro.data
         post.body = form.body.data
         if form.category_name.data:
-            if Category.query.filter_by(category_name=form.category_name.data).first() is None:
+            category_name_exists = Category.query.filter_by(category_name=form.category_name.data).first()
+            if not category_name_exists:
                 category = Category(category_name=form.category_name.data)
                 db.session.add(category)
                 db.session.commit()
                 post.category_id = category.id
-                #db.session.add(post)
+            else:
+                post.category_id = category_name_exists.id
         db.session.add(post)
         flash('文章已提交 (｡・`ω´･)')
         return redirect(url_for('.post', id=post.id))
@@ -318,7 +334,7 @@ def article_new():
             db.session.add(category)
             db.session.commit()
             post.category_id = category.id
-            db.session.add(post)
+            # db.session.add(post)
         return redirect(url_for('.article'))       
     return render_template('article_new.html', form=form)
     # 这样修改之后,首页中的文章列表只会显示有限数量的文章。若想查看第 2 页中的文章, 要在浏览器地址栏中的 URL 后加上查询字符串 ?page=2。
@@ -371,7 +387,7 @@ def article():
         error_out=False)
     # posts = Post.query.order_by(Post.timestamp.desc()).all()
     posts = pagination.items
-    category = Category.query.all()
+    category = sort_category()
     for post in posts:
         post.body_show = False       
     return render_template('article.html', posts=posts, categories=category, show_followed=show_followed, pagination=pagination)
@@ -393,7 +409,7 @@ def article_category_name(category_name):
         page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
         error_out=False)
     posts = pagination.items
-    category = Category.query.all()
+    category = sort_category()
     for post in posts:
         post.body_show = False          
     return render_template('article.html', posts=posts, categories=category, show_followed=show_followed, pagination=pagination)

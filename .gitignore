@@ -1,5 +1,6 @@
 venv/
 migrations/
+tem/
 
 *.sqlite
 *.pyc

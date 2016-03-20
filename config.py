@@ -8,18 +8,18 @@ class Config(object):
     SECRET_KEY = os.environ.get('SECRET_KEY') or 'hard to guess string'
     # 每次request自动提交db.session.commit()
     SQLALCHEMY_COMMIT_ON_TEARDOWN = True
-    MAIL_SERVER = 'smtp.163.com'
+    MAIL_SERVER = 'smtp.qq.com'
     # 163服务器端口号: http://help.163.com/10/1111/15/6L7HMASV00753VB8.html
     MAIL_PORT = 465
-    MAIL_USE_TLS = True
+    MAIL_USE_SSL = True 
     MAIL_USERNAME = os.environ.get('MAIL_USERNAME')    
     MAIL_PASSWORD = os.environ.get('MAIL_PASSWORD')
-    FLASKY_MAIL_SUBJECT_PREFIX = '[yiyi\'s blog]'
-    FLASKY_MAIL_SENDER = 'Admin <510720619@qq.com>'
+    FLASKY_MAIL_SUBJECT_PREFIX = '[Blog of Wenyi Zhao]'
+    FLASKY_MAIL_SENDER = 'YIYI'
     FLASKY_ADMIN = os.environ.get('FLASKY_ADMIN')
-    FLASKY_POSTS_PER_PAGE = 20
-    FLASKY_FOLLOWERS_PER_PAGE = 50
-    FLASKY_COMMENTS_PER_PAGE = 30
+    FLASKY_POSTS_PER_PAGE = 10
+    FLASKY_FOLLOWERS_PER_PAGE = 20
+    FLASKY_COMMENTS_PER_PAGE = 10
 
     """
     配置类可以定义 init_app() 类方法,其参数是程序实例。在这个方法中,可以执行对当前环境的配置初始化。
