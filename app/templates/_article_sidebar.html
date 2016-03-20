@@ -1,0 +1,20 @@
+<div>
+    <ul class="list-group">
+        <li class="list-group-item list-group-item-danger ">
+            <span class="glyphicon glyphicon-book"></span>
+            <span>&nbsp;&nbsp;分类</span>
+        </li>
+        {% if categories %}
+        {% for category in categories %}
+        {% if category.posts.count() > 0 %}
+        <a href="{{ url_for('.article_category_name', category_name=category.category_name) }}" class="list-group-item">
+            {{ category.category_name }}
+            <span class="badge">{{ category.posts.count() }}</span>
+        </a>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+    </ul>
+</div>
+
+    

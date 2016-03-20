@@ -325,7 +325,8 @@ class Post(db.Model):
     timestamp = db.Column(db.DateTime, index=True, default=datetime.utcnow)
     # 和 User 模型之间是一对多关系
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
-    comments = db.relationship('Comment', backref='post', lazy='dynamic')
+    comments = db.relationship('Comment', backref='post', lazy='dynamic', cascade='all, delete-orphan')
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
 
     # 添加到 Post 模型中的类方法,用来生成虚拟数据
     @staticmethod
@@ -363,13 +364,14 @@ class Post(db.Model):
     def on_changed_body(target, value, oldvalue, initiator):
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 
                         'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
-                        'h1', 'h2', 'h3', 'p',
-                        'class', 'hred', 'rel', 'src', 'alt', 'img']
-        # attrs = {
-        # '*': ['class'],
-        # 'a': ['href', 'rel'],
-        # 'img': ['src', 'alt'],
-        # }
+                        'h1', 'h2', 'h3', 'h4', 'p', 'q', 
+                        'img', 'hr', 'sub', 'sup', 'del']
+        # 加了这个终于可以显示图片了，否则哪怕有上面的也不行
+        attrs = {
+        '*': ['class'],
+        'a': ['href', 'rel'],
+        'img': ['src', 'alt'],
+        }
         """
         真正的转换过程分三步完成。
         首先,markdown() 函数初步把 Markdown 文本转换成 HTML。 
@@ -381,7 +383,7 @@ class Post(db.Model):
         """
         # target.title_html = bleach.linkify(bleach.clean(markdown(value, output_format='html'), tags=allowed_tags, strip=True))
         # target.intro_html = bleach.linkify(bleach.clean(markdown(value, output_format='html'), tags=allowed_tags, strip=True))
-        target.body_html = bleach.linkify(bleach.clean(markdown(value, output_format='html'), strip=True))
+        target.body_html = bleach.linkify(bleach.clean(markdown(value, output_format='html'), tags=allowed_tags, attributes=attrs, strip=True))
 
 # on_changed_body 函数注册在 body 字段上,是 SQLAlchemy“set”事件的监听程序,这意味着只要这个类实例的 body 字段设了新值,函数就会自动被调用
 # db.event.listen(Post.title, 'set', Post.on_changed_title)
@@ -410,10 +412,16 @@ class Comment(db.Model):
 
     @staticmethod
     def on_changed_body(target, value, oldvalue, initiator):
-        allowed_tags = ['p', 'a', 'abbr', 'acronym', 'b', 'code', 'em', 'i', 'strong', 'h3', 'h4', 'li', 'ol', 'ul', 'blockquote', 'pre']
+        allowed_tags = ['p', 'a', 'abbr', 'acronym', 'b', 'code', 'em', 'i', 'strong', 
+                        'h3', 'h4', 'li', 'ol', 'ul', 'blockquote', 'pre', 'hr', 'img', 'sub', 'sup']
+        attrs = {
+        '*': ['class'],
+        'a': ['href', 'rel'],
+        'img': ['src', 'alt'],
+        }       
         target.body_html = bleach.linkify(bleach.clean(
             markdown(value, output_format='html'),
-            tags=allowed_tags, strip=True))
+            tags=allowed_tags, attributes=attrs, strip=True))
 
     """
     和博客文章一样,评论也定义了一个事件,在修改 body 字段内容时触发,自动把 Markdown 文本转换成 HTML。
@@ -424,6 +432,10 @@ db.event.listen(Comment.body, 'set', Comment.on_changed_body)
     # 为了完成对数据库的修改,User 和 Post 模型还要建立与 comments 表的一对多关系
 
 
-
+class Category(db.Model):
+    __tablename__ = 'categories'
+    id = db.Column(db.Integer, primary_key=True)
+    category_name = db.Column(db.String(64))
+    posts = db.relationship('Post', backref='category', lazy='dynamic')   
 
 

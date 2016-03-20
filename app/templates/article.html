@@ -8,41 +8,32 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-<style type="text/css">
-    #flask-pagedown-body {
-        height: 260px;
-    }
-</style>
 {% endblock %}
 
 {% block page_content %}
 <div class="write-article-body">
     {% if current_user.can(Permission.WRITE_ARTICLES) %}
-    <button id="toggle-write-article" class="btn btn-primary">显示/隐藏文章编辑</button>
-    <div class="form-write-article">
-        {{ wtf.quick_form(form) }}
-    </div>        
+    <a class="btn btn-primary" href="{{ url_for('.article_new') }}">写新文章</a>
     {% endif %}
 </div>
 
-{% include '_posts.html' %}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="col-xs-12 col-md-9">
+            {% include '_posts.html' %}
 
-{% if pagination %}
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, '.article') }}
+            {% if pagination %}
+            <div class="pagination">{{ macros.pagination_widget(pagination, '.article') }}</div>
+            {% endif %}
+        </div>
+        <div class="col-xs-6 col-md-3 article-sidebar-margin-top">
+        {% include '_article_sidebar.html' %}
+        </div>       
+    </div>
 </div>
-{% endif %}
 {% endblock %}
 
 {% block scripts %}
 {{ super() }}
 {{ pagedown.include_pagedown() }}
-<script type="text/javascript">
-$(document).ready(function(){
-  $(".form-write-article").hide();
-  $("#toggle-write-article").click(function(){
-    $(".form-write-article").toggle(200);
-  });
-});
-</script>
 {% endblock %}

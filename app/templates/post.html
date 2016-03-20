@@ -6,41 +6,33 @@
 
 {% block head %}
 {{ super() }}
-<style type="text/css">
-    #flask-pagedown-body {
-        height: 260px;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
 {% endblock %}
 
 {% block page_content %}
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="col-xs-12 col-md-9">
+            {% include '_posts.html' %}
+            <h3 id="comments">评论</h3>
+            {% if current_user.can(Permission.COMMENT) %}
+            <div class="comment-form">{{ wtf.quick_form(form) }}</div>
+            {% else %}
+            <a href="{{ url_for('auth.login') }}" class="btn btn-primary">登陆后评论</a>
+            <a href="{{ url_for('auth.register') }}" class="btn btn-default">注册</a>
+            {% endif %}
 
-{% include '_posts.html' %}
+            {% include '_comments.html' %}
 
-<h3 id="comments">评论</h3>
-{% if current_user.can(Permission.COMMENT) %}
-
-<div class="comment-form">
-    {{ wtf.quick_form(form) }}
+            {% if pagination %}
+            <div class="pagination">
+                {{ macros.pagination_widget(pagination, '.post', fragment='#comments', id=posts[0].id) }}
+            </div>
+            {% endif %}
+        </div>
+        <div class="col-xs-6 col-md-3 article-sidebar-margin-top">{% include '_article_sidebar.html' %}</div>
+    </div>
 </div>
-
-{# <div>
-    {{ form.body.label }} {{ form.body(class="yiyi-comment-body") }} 
-    {{ form.submit() }}
-</div> #}
-
-{% else %}
-<a href="{{ url_for('auth.login') }}" class="btn btn-primary">登陆后评论</a>
-<a href="{{ url_for('auth.register') }}" class="btn btn-default">注册</a>
-{% endif %}
-
-{% include '_comments.html' %}
-
-{% if pagination %}
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, '.post', fragment='#comments', id=posts[0].id) }}
-</div>
-{% endif %}
 {% endblock %}
 
 {% block scripts %}

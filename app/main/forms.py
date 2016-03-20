@@ -62,6 +62,7 @@ class PostForm(Form):
     title = TextAreaField("编辑文章_标题", validators=[Required()])
     intro = TextAreaField("编辑文章_简介")
     body = PageDownField("编辑文章_正文", validators=[Required()])
+    category_name = StringField("分类", validators=[Length(0,64)])
     submit = SubmitField('提交')
 
 

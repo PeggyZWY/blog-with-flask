@@ -9,7 +9,7 @@
 {% endblock %}
 
 {% block navbar %}
-<div class="navbar navbar-inverse" role="navigation">
+<div class="navbar navbar-default" role="navigation">
     <div class="container">
         <div class="navbar-header">
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
@@ -44,11 +44,21 @@
                 -->
                 <!-- 刚刚下面这个写成(),就报错了，注意没括号啊 -->
                 {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('auth.logout') }}">
-                <img class="navbar-avatar" src="{{ current_user.avatar() }}">
-                退出</a></li>
+                <li class="dropdown">
+                    <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        <img class="navbar-avatar" src="{{ current_user.avatar() }}">
+                        {{ current_user.username }} <b class="caret"></b>
+                    </a>
+                    <ul class="dropdown-menu">
+                        {# <li><a href="{{ url_for('auth.change_password') }}">修改密码</a></li> #}
+                        <li><a href="#">修改密码</a></li>
+                        {# <li><a href="{{ url_for('auth.change_email_request') }}">修改邮箱</a></li> #}
+                        <li><a href="#">修改邮箱</a></li>
+                        <li><a href="{{ url_for('auth.logout') }}">退出</a></li>
+                    </ul>
+                </li>
                 {% else %}
-                <li><a href="{{ url_for('auth.login') }}">登陆</a></li>
+                <li><a href="{{ url_for('auth.login') }}">登陆 / 注册</a></li>
                 {% endif %}
             </ul>
         </div> 
@@ -77,4 +87,10 @@
 {{ super() }}
 {{ moment.include_moment() }}
 {{ moment.lang('zh-cn') }}
+{{ pagedown.include_pagedown() }}
+<script type="text/javascript">
+$(document).ready(function(){
+    $("#submit").addClass("btn-primary");
+});
+</script>
 {% endblock %}

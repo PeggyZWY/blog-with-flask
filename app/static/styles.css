@@ -106,9 +106,13 @@ div.flask-pagedown-preview h3 {
     border-bottom: 1px solid #e0e0e0;
 }
 /* base.html */
+.navbar {
+    border-radius: 0;
+}
 .navbar-brand {
     font-size: 32px;
     line-height: 22px;
+    color: white;
 }
 .navbar-avatar {
     width: 23px;
@@ -138,4 +142,11 @@ div.flask-pagedown-preview h3 {
 .profile-avatar {
     width: 180px;
     height: 180px;
+}
+/* article.html */
+.article-sidebar-margin-top {
+    margin-top: 15px;
+}
+#flask-pagedown-body {
+    height: 260px;
 }

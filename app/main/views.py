@@ -4,7 +4,7 @@
 from flask import render_template, redirect, url_for, abort, flash, request, current_app, make_response
 from flask.ext.login import login_required, current_user
 from . import main
-from ..models import Role, User, Permission, Post, Comment
+from ..models import Role, User, Permission, Post, Comment, Category
 from .. import db
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from ..decorators import admin_required, permission_required
@@ -95,7 +95,7 @@ def post(id):
 + *斜体*  
 +  **粗体**  
 + `代码`  
-+ [完整版Markdown语法说明](http://wowubuntu.com/markdown/index.html)  
++ [完整版 Markdown 语法说明](http://wowubuntu.com/markdown/index.html)  
   
 > 块引用  
   
@@ -122,8 +122,9 @@ def post(id):
         page, per_page=current_app.config['FLASKY_COMMENTS_PER_PAGE'],
         error_out=False)
     comments = pagination.items
+    category = Category.query.all()
     # 评论列表对象和分页对象都传入了模板,以便渲染。
-    return render_template('post.html', posts=[post], form=form, comments=comments, pagination=pagination)
+    return render_template('post.html', posts=[post], form=form, categories=category, comments=comments, pagination=pagination)
     # 评论的渲染过程在新模板 _comments.html 中进行,类似于 _posts.html,但使用的 CSS 类不 同。_comments.html 模板要引入 post.html 中,放在文章正文下方,后面再显示分页导航。
 
     """ 这是之前的最后一句：
@@ -139,6 +140,8 @@ def post(id):
 @login_required
 def edit(id):
     post = Post.query.get_or_404(id)
+    if post.category_id:
+        category = Category.query.get_or_404(post.category_id)
     if current_user != post.author and not current_user.can(Permission.ADMINISTER):
         abort(403)
     # 这里使用 的 PostForm 表单类和首页中使用的是同一个。
@@ -147,12 +150,22 @@ def edit(id):
         post.title = form.title.data
         post.intro = form.intro.data
         post.body = form.body.data
+        if form.category_name.data:
+            if Category.query.filter_by(category_name=form.category_name.data).first() is None:
+                category = Category(category_name=form.category_name.data)
+                db.session.add(category)
+                db.session.commit()
+                post.category_id = category.id
+                #db.session.add(post)
         db.session.add(post)
         flash('文章已提交 (｡・`ω´･)')
         return redirect(url_for('.post', id=post.id))
     form.title.data = post.title
     form.intro.data = post.intro
     form.body.data = post.body
+    if post.category_id:
+        category = Category.query.filter_by(id=post.category.id).first()
+        form.category_name.data = category.category_name
     return render_template('edit_post.html', form=form)
 
 
@@ -286,8 +299,9 @@ def moderate_disable(id):
     return redirect(url_for('.moderate', page=request.args.get('page', 1, type=int)))
 
 
-@main.route('/article', methods=['GET', 'POST'])
-def article():
+@main.route('/article_new', methods=['GET', 'POST'])
+@permission_required(Permission.WRITE_ARTICLES)
+def article_new():
     form = PostForm()
     if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
         """
@@ -296,23 +310,55 @@ def article():
         这个对象的表现类似用户对象,但实际上却是一个轻度包装,包含真正的用户对象。 
         数据库需要真正的用户对象,因此要调用 _get_current_object() 方法。
         """
-        post = Post(title=form.title.data, intro=form.intro.data, body=form.body.data, author=current_user._get_current_object())
+        post = Post(title=form.title.data, intro=form.intro.data, body=form.body.data, 
+            author=current_user._get_current_object())
         db.session.add(post)
-        return redirect(url_for('.article'))
+        if form.category_name.data:
+            category = Category(category_name=form.category_name.data)
+            db.session.add(category)
+            db.session.commit()
+            post.category_id = category.id
+            db.session.add(post)
+        return redirect(url_for('.article'))       
+    return render_template('article_new.html', form=form)
+    # 这样修改之后,首页中的文章列表只会显示有限数量的文章。若想查看第 2 页中的文章, 要在浏览器地址栏中的 URL 后加上查询字符串 ?page=2。
+
+
+@main.route('/article', methods=['GET', 'POST'])
+def article():
+    # form = PostForm()
+    # if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
+    #     """
+    #     新文章对象的 author 属性值为表达式 current_user._get_current_object()。
+    #     变量 current_user 由 Flask-Login 提供,和所有上下文变量一样,也是通过线程内的代理对象实现。
+    #     这个对象的表现类似用户对象,但实际上却是一个轻度包装,包含真正的用户对象。 
+    #     数据库需要真正的用户对象,因此要调用 _get_current_object() 方法。
+    #     """
+    #     post = Post(title=form.title.data, intro=form.intro.data, body=form.body.data, 
+    #         author=current_user._get_current_object())
+    #     db.session.add(post)
+    #     if form.category_name.data:
+    #         category = Category(category_name=form.category_name.data)
+    #         db.session.add(category)
+    #         db.session.commit()
+    #         post.category_id = category.id
+    #         db.session.add(post)
+    #     return redirect(url_for('.article'))
     # 渲染的页数从请求的查询字符串(request.args)中获取,如果没有明确指定,则默认渲染第一页。参数 type=int 保证参数无法转换成整数时,返回默认值
     page = request.args.get('page', 1, type=int)
-    show_followed = False
-    if current_user.is_authenticated:
-        """
-        决定显示所有博客文章还是只显示所关注用户文章的选项存储在 cookie 的 show_followed 字段中,如果其值为非空字符串,则表示只显示所关注用户的文章。
-        cookie 以 request. cookies 字典的形式存储在请求对象中.
-        这个 cookie 的值会转换成布尔值,根据得到的值设定本地变量 query 的值。query 的值决定最终获取所有博客文章的查询,或是获取过滤后的博客文章查询。
-        """
-        show_followed = bool(request.cookies.get('show_followed', ''))
-    if show_followed:
-        query = current_user.followed_posts
-    else:
-        query = Post.query
+    # show_followed = False
+    # if current_user.is_authenticated:
+    #     """
+    #     决定显示所有博客文章还是只显示所关注用户文章的选项存储在 cookie 的 show_followed 字段中,如果其值为非空字符串,则表示只显示所关注用户的文章。
+    #     cookie 以 request. cookies 字典的形式存储在请求对象中.
+    #     这个 cookie 的值会转换成布尔值,根据得到的值设定本地变量 query 的值。query 的值决定最终获取所有博客文章的查询,或是获取过滤后的博客文章查询。
+    #     """
+    #     show_followed = bool(request.cookies.get('show_followed', ''))
+    # if show_followed:
+    #     query = current_user.followed_posts
+    # else:
+    #     query = Post.query
+    query = Post.query
     """
     为了显示某页中的记录,要把 all() 换成 Flask-SQLAlchemy 提供的 paginate() 方法。
     页数是 paginate() 方法的第一个参数,也是唯一必需的参数。
@@ -325,10 +371,32 @@ def article():
         error_out=False)
     # posts = Post.query.order_by(Post.timestamp.desc()).all()
     posts = pagination.items
+    category = Category.query.all()
     for post in posts:
-        post.body_show = False
-    return render_template('article.html', form=form, posts=posts, show_followed=show_followed, pagination=pagination)
+        post.body_show = False       
+    return render_template('article.html', posts=posts, categories=category, show_followed=show_followed, pagination=pagination)
     # 这样修改之后,首页中的文章列表只会显示有限数量的文章。若想查看第 2 页中的文章, 要在浏览器地址栏中的 URL 后加上查询字符串 ?page=2。
+
+
+@main.route('/article/<category_name>', methods=['GET', 'POST'])
+def article_category_name(category_name):
+    # form = PostForm()
+    # if current_user.can(Permission.WRITE_ARTICLES) and form.validate_on_submit():
+    #     post = Post(title=form.title.data, intro=form.intro.data, body=form.body.data, author=current_user._get_current_object())
+    #     db.session.add(post)
+    #     return redirect(url_for('.article'))
+    page = request.args.get('page', 1, type=int)
+    if not Category.query.filter_by(category_name=category_name).all():
+        abort(404)
+    _category = Category.query.filter_by(category_name=category_name).first()
+    pagination = Post.query.filter_by(category_id=_category.id).order_by(Post.timestamp.desc()).paginate(
+        page, per_page=current_app.config['FLASKY_POSTS_PER_PAGE'],
+        error_out=False)
+    posts = pagination.items
+    category = Category.query.all()
+    for post in posts:
+        post.body_show = False          
+    return render_template('article.html', posts=posts, categories=category, show_followed=show_followed, pagination=pagination)
 
 
 @main.route('/delete-article/<int:id>')

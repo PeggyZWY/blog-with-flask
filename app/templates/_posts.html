@@ -13,9 +13,9 @@
                  <!-- 如果 post.body_html 字段存在,还要把 post.body 换成 post.body_html -->
                 <h2><a href="{{ url_for('.post', id=post.id, page=-1) }}">{{ post.title }}</a></h2>
                 {% if post.intro %}
-                <blockquote>
+                <big>
                     {{ post.intro }}
-                </blockquote>
+                </big>
                 {% endif %}
                 </p>
                 {% if post.body_show %}
@@ -46,9 +46,17 @@
                     <span class="label label-danger">编辑 [管理员]</span>
                 </a>
                 {% endif %}
+{#                 {% if post.tagname %}
+                <a href="{{ url_for('.article_category_name', category_name=category.category_name) }}">
+                    <span class="label label-warning">
+                        <span class="glyphicon glyphicon-tags"></span>
+                        {{ post.tagname }}
+                    </span>
+                </a>
+                {% endif %} #}
                 {% if not post.body_show %}
                 <a href="{{ url_for('.post', id=post.id) }}">
-                    <span class="label label-default">阅读原文</span>
+                    <span class="label label-default">阅读全文</span>
                 </a>
                 {% endif %}
                 <!-- 为了完善功能,我们还要在首页和资料页中加上指向评论页面的链接 -->

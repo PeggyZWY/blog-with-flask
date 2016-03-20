@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}Blog of Wenyi Zhao - 写新文章{% endblock %}
+
+{% block page_content %}
+<div class="write-article-body">
+    {% if current_user.can(Permission.WRITE_ARTICLES) %}
+    <div class="form-write-article">{{ wtf.quick_form(form) }}</div>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block scripts %}
+{{ super() }}
+{{ pagedown.include_pagedown() }}
+{% endblock %}

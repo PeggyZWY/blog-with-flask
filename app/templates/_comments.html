@@ -15,6 +15,9 @@
                 <!-- _comments.html 模板中显示评论正文的部分要做两方面修改。对于普通用户(没设定 moderate 变量),不显示标记为有问题的评论。 -->
                 {% if comment.disabled %}
                 <p><i>此条评论已被禁止显示</i></p>
+                {% if current_user.is_administrator() %}
+                <blockquote>评论所属文章名: {{ comment.comment_of_which_post }}</blockquote>
+                {% endif %}
                 {% endif %}
                 <!-- 对于协管员(moderate 设为 True),不管评论是否被标记为有问题,都要显示 -->
                 {% if not comment.disabled %}
