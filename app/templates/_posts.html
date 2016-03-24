@@ -56,6 +56,9 @@
                     </span>
                 </a>
                 {% endif %} #}
+                <a href="{{ url_for('.article_category_name', category_name=post.category_name) }}">
+                    <span class="label label-danger">{{ post.category_name }}</span>
+                </a>
                 {% if not post.body_show %}
                 <a href="{{ url_for('.post', id=post.id) }}">
                     <span class="label label-default">阅读全文</span>

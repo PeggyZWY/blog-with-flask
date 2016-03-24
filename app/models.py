@@ -344,6 +344,10 @@ class Post(db.Model):
     comments = db.relationship('Comment', backref='post', lazy='dynamic', cascade='all, delete-orphan')
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
 
+    @property
+    def category_name(self):
+        return Category.query.filter_by(id = self.category_id).first().category_name
+
     # 添加到 Post 模型中的类方法,用来生成虚拟数据
     @staticmethod
     def generate_fake(count=100):
@@ -381,7 +385,8 @@ class Post(db.Model):
         allowed_tags = ['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 
                         'em', 'i', 'li', 'ol', 'pre', 'strong', 'ul',
                         'h1', 'h2', 'h3', 'h4', 'p', 'q', 
-                        'img', 'hr', 'sub', 'sup', 'del']
+                        'img', 'hr', 'sub', 'sup', 'del',
+                        'dl', 'dt', 'dd']
         # 加了这个终于可以显示图片了，否则哪怕有上面的也不行
         attrs = {
         '*': ['class'],

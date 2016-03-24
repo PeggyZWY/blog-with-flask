@@ -1,9 +1,82 @@
+/* 全局 */
+
+html * {
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+body, div, dl, dt, dd, ul, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, button, textarea, blockquote {
+    margin-left: 0;
+    margin-right: 0;
+    padding-left: 0;
+    padding-right: 0;
+}
+body, td, th {
+    font-family: "Ubuntu", sans-serif, Arial;
+    font-size: 13px;
+    line-height: 1.62;
+}
+.h1, .h2, .h3, h1, h2, h3 {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+.h1, h1 {
+    font-size: 28px;
+}
+.h2, h2 {
+    font-size: 24px;
+}
+.h3, h3 {
+    font-size: 20px;
+}
+.h4, .h5, .h6, h4, h5, h6 {
+    font-size: 18px;
+}
+hr {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+/* about navbar */
+.navbar {
+    border-radius: 0;
+    margin-bottom: 0px;
+    /* border-bottom: 1px solid transparent; */
+    border-bottom: none;
+}
+.navbar-avatar {
+    width: 23px;
+    height: 23px;
+}
+.navbar-default .navbar-brand {
+    font-size: 32px;
+    line-height: 22px;
+}
+.navbar-default .navbar-brand, .navbar-default .navbar-nav>li>a, .dropdown-menu>li>a {
+    color: #555;
+}
+.nav>li>a {
+    font-size: 15px;    
+}
+.navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
+    color: rgb(216,134,131);
+}
+.navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
+    color: rgb(216,134,131);
+}
+.dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover {
+    color: rgb(216,134,131);
+    text-decoration: none;
+    background-color: rgb(245, 245, 245);
+}
+/* body */
+.list-group-item {
+    padding: 6px 15px;
+}
 .profile-thumbnail {
     position: absolute;
 }
 .profile-header {
-    min-height: 260px;
-    margin-left: 240px;
+    min-height: 200px;
+    margin-left: 210px;
 }
 div.post-tabs {
     margin-top: 16px;
@@ -19,11 +92,11 @@ div.post-tabs ul.posts {
     border-top: none;
 }
 ul.posts li.post {
-    padding: 8px;
+    padding: 8px 1px;
     border-bottom: 1px solid #e0e0e0;
 }
 ul.posts li.post:hover {
-    background-color: #f0f0f0;
+    background-color: rgb(245, 245, 245);
 }
 div.post-date {
     float: right;
@@ -35,7 +108,7 @@ div.post-thumbnail {
     position: absolute;
 }
 div.post-content {
-    margin-left: 48px;
+    margin-left: 35px;
     min-height: 48px;
 }
 div.post-footer {
@@ -47,7 +120,7 @@ ul.comments {
     margin: 16px 0px 0px 0px;
 }
 ul.comments li.comment {
-    margin-left: 32px;
+    /* margin-left: 32px; */
     padding: 8px;
     border-bottom: 1px solid #e0e0e0;
 }
@@ -67,7 +140,7 @@ div.comment-thumbnail {
     position: absolute;
 }
 div.comment-content {
-    margin-left: 48px;
+    margin-left: 35px;
     min-height: 48px;
 }
 div.comment-form {
@@ -82,7 +155,8 @@ div.pagination {
 div.flask-pagedown-preview {
     margin: 10px 0px 10px 0px;
     border: 1px solid #e0e0e0;
-    padding: 4px;
+    padding: 5px 5px 5px 30px;
+
 }
 div.flask-pagedown-preview h1 {
     font-size: 140%;
@@ -105,18 +179,12 @@ div.flask-pagedown-preview h3 {
 .table.followers tr {
     border-bottom: 1px solid #e0e0e0;
 }
-/* base.html */
-.navbar {
-    border-radius: 0;
+/* add */
+blockquote {
+    padding-left: 6px;
 }
-.navbar-brand {
-    font-size: 32px;
-    line-height: 22px;
-    color: white;
-}
-.navbar-avatar {
-    width: 23px;
-    height: 23px;
+pre {
+    padding-left: 8px;
 }
 /* _posts.html */
 #quote_l {
@@ -129,8 +197,8 @@ div.flask-pagedown-preview h3 {
 }
 /* 不需要在_posts.html里引入style.css，因为引了_posts.html的posts.html从base.html继承，而后者里面引入了style.css */
 .index-article-avatar {
-    width: 38px;
-    height: 38px;
+    width: 30px;
+    height: 30px;
 }
 /* followers.html */
 .followers-avatar {
@@ -143,8 +211,8 @@ div.flask-pagedown-preview h3 {
 }
 /* _comments.html */
 .comments-avatar {
-    width: 38px;
-    height: 38px;
+    width: 30px;
+    height: 30px;
 }
 /* user.html */
 .profile-avatar {
@@ -158,6 +226,65 @@ div.flask-pagedown-preview h3 {
 #flask-pagedown-body {
     height: 260px;
 }
+.write-article-body {
+    padding: 15px;
+}
 p {
     word-wrap: break-word;
+}
+/* resume.html */
+#cd-vertical-nav li {
+    list-style:none;
+}
+#section1 {
+    margin-top: -50px;
+    z-index: -1;
+}
+/* contact.html */
+/* html, body, .container-fluid {
+    height:100%;
+    width:100%;
+} */
+.contact-icons {
+    /* border: 2px solid black; */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    text-align: center;
+    padding:20px;
+    -webkit-transform: translate(-50%, -50%);
+    -moz-transform: translate(-50%, -50%);
+    -ms-transform: translate(-50%, -50%);
+    -o-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+}
+.contact-icons a {
+    text-decoration: none;
+}
+.iconfont {
+    display: inline-block;
+}
+.iconfont-github {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: -143px;
+}
+.iconfont-zhihu {
+    width: 53px;
+    height: 53px;
+    position: absolute;
+    left: -53px;
+}
+.iconfont-douban {
+    width: 57px;
+    height: 57px;
+    position: absolute;
+    left: 37px;
+}
+.iconfont-mail {
+    width: 57px;
+    height: 57px;
+    position: absolute;
+    left: 127px;
 }

@@ -11,14 +11,14 @@
 {% endblock %}
 
 {% block page_content %}
-<div class="write-article-body">
     {% if current_user.can(Permission.WRITE_ARTICLES) %}
+    <div class="write-article-body">
     <a class="btn btn-primary" href="{{ url_for('.article_new') }}">写新文章</a>
     {% endif %}
 </div>
 
 <div class="container-fluid">
-    <div class="row-fluid">
+    <div class="row">
         <div class="col-xs-12 col-md-9">
             {% include '_posts.html' %}
 
@@ -26,7 +26,7 @@
             <div class="pagination">{{ macros.pagination_widget(pagination, '.article') }}</div>
             {% endif %}
         </div>
-        <div class="col-xs-6 col-md-3 article-sidebar-margin-top">
+        <div class="col-xs-12 col-md-3 article-sidebar-margin-top">
         {% include '_article_sidebar.html' %}
         </div>       
     </div>

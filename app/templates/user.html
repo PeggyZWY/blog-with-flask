@@ -4,57 +4,58 @@
 {% block title %}{{ user.username }}{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
-    <img class="img-rounded profile-thumbnail profile-avatar" src="{{ user.avatar() }}">
-    <div class="profile-header">
-        <h1>{{ user.username }}</h1>
-        <!-- name 和 location 字段在同一个 <p> 元素中渲染。只有至少定义了这两个字段中的一个时, <p> 元素才会创建。 -->
-        {% if user.name or user.location %}
-        <p>
-            {% if user.name %}{{ user.name }}{% endif %}
-            {% if user.name and user.location %},{% endif %}
-            {% if user.location %}
-            来自
-            <a href="http://www.google.cn/maps/place/{{ user.location }}">{{ user.location }}</a>
-            {% endif %}
-        </p>
-        {% endif %}
-        <!-- 
-        如果登录用户是管理员,那么就显示用户的电子邮件地址,且渲染成mailto链接。
-        注意 is_administrator() 这个方法是在 models.py 中定义的，要有括号啊，没有的话这个if就没用，所有人都能看到邮件地址并发邮件。 
-        -->
-        {% if current_user.is_administrator() %}
-        <p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
-        {% endif %}
-        {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
-        <p>{{ moment(user.member_since).format('L') }} 加入, {{ moment(user.last_seen).fromNow() }}来看过</p>
-        <!-- <p>{{ user.posts.count() }} blog posts.</p> -->
-        <p>
-            {% if current_user.can(Permission.FOLLOW) and user != current_user %}
-                <!-- 如果用户查看一个尚未关注用户的资料页,页面中要显示一个“Follow”(关注)按钮,如 果查看已关注用户的资料页则显示“Unfollow”(取消关注)按钮 -->
-                {% if not current_user.is_following(user) %}
-                <a href="{{ url_for('.follow', username=user.username) }}" class="btn btn-primary">关注</a>
-                {% else %}
-                <a href="{{ url_for('.unfollow', username=user.username) }}" class="btn btn-default">取消关注</a>
+<div class="container-fluid">
+    <div class="page-header">
+        <img class="img-rounded profile-thumbnail profile-avatar" src="{{ user.avatar() }}">
+        <div class="profile-header">
+            <h1>{{ user.username }}</h1>
+            <!-- name 和 location 字段在同一个 <p> 元素中渲染。只有至少定义了这两个字段中的一个时, <p> 元素才会创建。 -->
+            {% if user.name or user.location %}
+            <p>
+                {% if user.name %}{{ user.name }}{% endif %}
+                {% if user.name and user.location %},{% endif %}
+                {% if user.location %}
+                来自
+                <a href="http://www.google.cn/maps/place/{{ user.location }}">{{ user.location }}</a>
                 {% endif %}
+            </p>
             {% endif %}
-            <!-- 页面中最好能显 示出关注者和被关注者的数量 -->
-            <a href="{{ url_for('.followers', username=user.username) }}">关注者: <span class="badge">{{ user.followers.count() - 1}}</span></a>
-            <a href="{{ url_for('.followed_by', username=user.username) }}">关注了: <span class="badge">{{ user.followed.count() - 1}}</span></a>
-            <!-- 在相应的用户资料页 中显示“Follows You”(关注了你)标志 -->
-            {% if current_user.is_authenticated and user != current_user and user.is_following(current_user) %}
-            | <span class="label label-default">关注了你</span>
-            {% endif %}
-        </p>
-        <p>
-            {% if user == current_user %}
-            <a class="btn btn-default" href="{{ url_for('.edit_profile') }}">修改资料</a>
-            {% endif %}
+            <!-- 
+            如果登录用户是管理员,那么就显示用户的电子邮件地址,且渲染成mailto链接。
+            注意 is_administrator() 这个方法是在 models.py 中定义的，要有括号啊，没有的话这个if就没用，所有人都能看到邮件地址并发邮件。 
+            -->
             {% if current_user.is_administrator() %}
-            <a class="btn btn-danger" href="{{ url_for('.edit_profile_admin', id=user.id) }}">修改资料 [管理员]</a>
+            <p><a href="mailto:{{ user.email }}">{{ user.email }}</a></p>
             {% endif %}
-        </p>
+            {% if user.about_me %}<p>{{ user.about_me }}</p>{% endif %}
+            <p>{{ moment(user.member_since).format('L') }} 加入, {{ moment(user.last_seen).fromNow() }}来看过</p>
+            <!-- <p>{{ user.posts.count() }} blog posts.</p> -->
+            <p>
+                {% if current_user.can(Permission.FOLLOW) and user != current_user %}
+                    <!-- 如果用户查看一个尚未关注用户的资料页,页面中要显示一个“Follow”(关注)按钮,如 果查看已关注用户的资料页则显示“Unfollow”(取消关注)按钮 -->
+                    {% if not current_user.is_following(user) %}
+                    <a href="{{ url_for('.follow', username=user.username) }}" class="btn btn-primary">关注</a>
+                    {% else %}
+                    <a href="{{ url_for('.unfollow', username=user.username) }}" class="btn btn-default">取消关注</a>
+                    {% endif %}
+                {% endif %}
+                <!-- 页面中最好能显 示出关注者和被关注者的数量 -->
+                <a href="{{ url_for('.followers', username=user.username) }}">关注者: <span class="badge">{{ user.followers.count() - 1}}</span></a>
+                <a href="{{ url_for('.followed_by', username=user.username) }}">关注了: <span class="badge">{{ user.followed.count() - 1}}</span></a>
+                <!-- 在相应的用户资料页 中显示“Follows You”(关注了你)标志 -->
+                {% if current_user.is_authenticated and user != current_user and user.is_following(current_user) %}
+                | <span class="label label-default">关注了你</span>
+                {% endif %}
+            </p>
+            <p>
+                {% if user == current_user %}
+                <a class="btn btn-default" href="{{ url_for('.edit_profile') }}">修改资料</a>
+                {% endif %}
+                {% if current_user.is_administrator() %}
+                <a class="btn btn-danger" href="{{ url_for('.edit_profile_admin', id=user.id) }}">修改资料 [管理员]</a>
+                {% endif %}
+            </p>
+        </div>
     </div>
-</div>
-  
+</div>  
 {% endblock %}

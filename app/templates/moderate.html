@@ -4,21 +4,23 @@
 {% block title %}Blog of Wenyi Zhao - 管理评论{% endblock %}
 
 {% block page_content %}
-<div class="page-header">
-    <h1>管理评论</h1>
-</div>
-<!-- 
-依靠之前创建的子模板 _comments. html 渲染评论
+<div class="container-fluid">
+    <div class="page-header">
+        <h1>管理评论</h1>
+    </div>
+    <!-- 
+    依靠之前创建的子模板 _comments. html 渲染评论
 
-这个模板将渲染评论的工作交给 _comments.html 模板完成,但把控制权交给从属模板之前,
-会使用 Jinja2 提供的 set 指令定义一个模板变量 moderate,并将其值设为 True。
-这个变量用在 _comments.html 模板中,决定是否渲染评论管理功能。
- -->
-{% set moderate = True %}
-{% include '_comments.html' %}
-{% if pagination %}
-<div class="pagination">
-    {{ macros.pagination_widget(pagination, '.moderate')}}
+    这个模板将渲染评论的工作交给 _comments.html 模板完成,但把控制权交给从属模板之前,
+    会使用 Jinja2 提供的 set 指令定义一个模板变量 moderate,并将其值设为 True。
+    这个变量用在 _comments.html 模板中,决定是否渲染评论管理功能。
+     -->
+    {% set moderate = True %}
+    {% include '_comments.html' %}
+    {% if pagination %}
+    <div class="pagination">
+        {{ macros.pagination_widget(pagination, '.moderate')}}
+    </div>
+    {% endif %}
 </div>
-{% endif %}
 {% endblock %}
