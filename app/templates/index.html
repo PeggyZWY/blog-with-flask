@@ -2,10 +2,40 @@
 
 {% block title %}Blog of Wenyi Zhao{% endblock %}
 
+{% block head %}
+{{ super() }}
+<style type="text/css">
+        html, body {
+            background-image: url(../static/index_bgimg.jpg);
+            background-size: cover;
+            color: #555;
+            position: relative;
+            z-index: -2;
+            width: 100%;
+            height: 100%;
+        }
+        .navbar-default {
+            background-color: rgba(255, 255, 255, 0.6);
+            border-color: transparent;
+        }
+        .dropdown-menu {
+            background-color: rgba(255, 255, 255, 0.6);
+        }
+    </style>
+{% endblock %}
+
 {% block page_content %}
-<div class="container-fluid">
-    <div class="page-header">
-        <h1>首页</h1>
+<div id="index-intro">
+    <div class="index-text">
+        <p id="myname">ZHAO WENYI</p>
+        <p>FRONT-END DEVELOPER</p>
+        <p>BASED IN SHANGHAI</p>
+    </div><br>
+    <div class="index-link">
+        <a href="{{ url_for('main.article') }}">+ BLOG</a>
+        <a href="{{ url_for('main.resume') }}">+ RESUME</a>
+        <a href="{{ url_for('main.lab') }}">+ LAB</a>
+        <a href="{{ url_for('main.contact') }}">+ CONTACT</a>
     </div>
 </div>
 {% endblock %}

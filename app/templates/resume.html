@@ -5,6 +5,15 @@
 {% block head %}
 {{ super() }}
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='resume.css') }}">
+<style type="text/css">
+    .navbar-default, .navbar-right {
+        background-color: rgba(62, 57, 71, 1);
+        border-color: transparent;
+    }
+    .navbar-default .navbar-brand, .navbar-default .navbar-nav>li>a {
+        color: white;
+    }
+</style>
 {% endblock %}
 
 {% block page_content %}
