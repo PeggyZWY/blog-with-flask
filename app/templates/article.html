@@ -35,5 +35,6 @@
 
 {% block scripts %}
 {{ super() }}
+<script type="text/javascript" src="{{ url_for('static', filename='smart_navigation.js') }}"></script>
 {{ pagedown.include_pagedown() }}
 {% endblock %}

@@ -24,3 +24,8 @@
     {% endif %}
 </div>
 {% endblock %}
+
+{% block scripts %}
+{{ super() }}
+<script type="text/javascript" src="{{ url_for('static', filename='smart_navigation.js') }}"></script>
+{% endblock %}

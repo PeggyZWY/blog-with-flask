@@ -1,290 +1,579 @@
 /* 全局 */
-
 html * {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 body, div, dl, dt, dd, ul, li, h1, h2, h3, h4, h5, h6, pre, code, form, fieldset, legend, input, button, textarea, blockquote {
-    margin-left: 0;
-    margin-right: 0;
-    padding-left: 0;
-    padding-right: 0;
+  margin-left: 0;
+  margin-right: 0;
+  padding-left: 0;
+  padding-right: 0;
 }
 body, td, th {
-    font-family: "Ubuntu", sans-serif, Arial;
-    font-size: 13px;
-    line-height: 1.62;
+  font-family: "Ubuntu", sans-serif, Arial;
+  font-size: 13px;
+  line-height: 1.62;
+}
+a:hover {
+  text-decoration: none;
+  word-break: break-all;
+  word-wrap:break-word;
 }
 .h1, .h2, .h3, h1, h2, h3 {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 .h1, h1 {
-    font-size: 28px;
+  font-size: 28px;
 }
 .h2, h2 {
-    font-size: 24px;
+  font-size: 24px;
 }
 .h3, h3 {
-    font-size: 20px;
+  font-size: 20px;
 }
 .h4, .h5, .h6, h4, h5, h6 {
-    font-size: 18px;
+  font-size: 18px;
 }
 hr {
-    margin-top: 10px;
-    margin-bottom: 10px;
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
+
 /* about navbar */
 .navbar {
-    border-radius: 0;
-    margin-bottom: 0px;
-    /* border-bottom: 1px solid transparent; */
-    border-bottom: none;
+  border-radius: 0;
+  margin-bottom: 0px;    /* border-bottom: 1px solid transparent; */
+  border-bottom: none;
 }
 .navbar-avatar {
-    width: 23px;
-    height: 23px;
+  width: 23px;
+  height: 23px;
 }
 .navbar-default .navbar-brand {
-    font-size: 32px;
-    line-height: 22px;
+  font-size: 32px;
+  line-height: 22px;
 }
 .navbar-default .navbar-brand, .navbar-default .navbar-nav>li>a, .dropdown-menu>li>a {
-    color: #555;
+  color: #555;
 }
 .nav>li>a {
-    font-size: 15px;    
+  font-size: 15px;
 }
 .navbar-default .navbar-brand:focus, .navbar-default .navbar-brand:hover {
-    color: rgb(216,134,131);
+  color: rgb(216, 134, 131);
 }
 .navbar-default .navbar-nav>li>a:focus, .navbar-default .navbar-nav>li>a:hover {
-    color: rgb(216,134,131);
+  color: rgb(216, 134, 131);
 }
 .dropdown-menu>li>a:focus, .dropdown-menu>li>a:hover {
-    color: rgb(216,134,131);
-    text-decoration: none;
-    background-color: rgb(245, 245, 245);
+  color: rgb(216, 134, 131);
+  text-decoration: none;
+  background-color: rgb(245, 245, 245);
 }
+
 /* body */
 .list-group-item {
-    padding: 6px 15px;
+  padding: 6px 15px;
 }
 .profile-thumbnail {
-    position: absolute;
+  position: absolute;
 }
 .profile-header {
-    min-height: 200px;
-    margin-left: 210px;
+  min-height: 200px;
+  margin-left: 210px;
 }
 div.post-tabs {
-    margin-top: 16px;
+  margin-top: 16px;
 }
 ul.posts {
-    list-style-type: none;
-    padding: 0px;
-    margin: 16px 0px 0px 0px;
-    border-top: 1px solid #e0e0e0;
+  list-style-type: none;
+  padding: 0px;
+  margin: 16px 0px 0px 0px;
+  border-top: 1px solid #e0e0e0;
 }
 div.post-tabs ul.posts {
-    margin: 0px;
-    border-top: none;
+  margin: 0px;
+  border-top: none;
 }
 ul.posts li.post {
-    padding: 8px 1px;
-    border-bottom: 1px solid #e0e0e0;
+  padding: 8px 1px;
+  border-bottom: 1px solid #e0e0e0;
 }
 ul.posts li.post:hover {
-    background-color: rgb(245, 245, 245);
+  background-color: rgb(245, 245, 245);
 }
 div.post-date {
-    float: right;
+  float: right;
 }
 div.post-author {
-    font-weight: bold;
+  font-weight: bold;
 }
 div.post-thumbnail {
-    position: absolute;
+  position: absolute;
 }
 div.post-content {
-    margin-left: 35px;
-    min-height: 48px;
+  margin-left: 35px;
+  min-height: 48px;
 }
 div.post-footer {
-    text-align: right;
+  text-align: right;
 }
 ul.comments {
-    list-style-type: none;
-    padding: 0px;
-    margin: 16px 0px 0px 0px;
+  list-style-type: none;
+  padding: 0px;
+  margin: 16px 0px 0px 0px;
 }
 ul.comments li.comment {
-    /* margin-left: 32px; */
-    padding: 8px;
-    border-bottom: 1px solid #e0e0e0;
+
+  /* margin-left: 32px; */
+  padding: 8px;
+  border-bottom: 1px solid #e0e0e0;
 }
 ul.comments li.comment:nth-child(1) {
-    border-top: 1px solid #e0e0e0;
+  border-top: 1px solid #e0e0e0;
 }
 ul.comments li.comment:hover {
-    background-color: #f0f0f0;
+  background-color: #f0f0f0;
 }
 div.comment-date {
-    float: right;
+  float: right;
 }
 div.comment-author {
-    font-weight: bold;
+  font-weight: bold;
 }
 div.comment-thumbnail {
-    position: absolute;
+  position: absolute;
 }
 div.comment-content {
-    margin-left: 35px;
-    min-height: 48px;
+  margin-left: 35px;
+  min-height: 48px;
 }
 div.comment-form {
-    margin: 16px 0px 16px 32px;
+  margin: 16px 0px 16px 0px;
 }
 div.pagination {
-    width: 100%;
-    text-align: right;
-    padding: 0px;
-    margin: 0px;
+  width: 100%;
+  text-align: right;
+  padding: 0px;
+  margin: 0px;
 }
 div.flask-pagedown-preview {
-    margin: 10px 0px 10px 0px;
-    border: 1px solid #e0e0e0;
-    padding: 5px 5px 5px 30px;
-
+  margin: 10px 0px 10px 0px;
+  border: 1px solid #e0e0e0;
+  padding: 5px 5px 5px 30px;
 }
 div.flask-pagedown-preview h1 {
-    font-size: 140%;
+  font-size: 140%;
 }
 div.flask-pagedown-preview h2 {
-    font-size: 130%;
+  font-size: 130%;
 }
 div.flask-pagedown-preview h3 {
-    font-size: 120%;
+  font-size: 120%;
 }
 .post-body h1 {
-    font-size: 140%;
+  font-size: 140%;
 }
 .post-body h2 {
-    font-size: 130%;
+  font-size: 130%;
 }
 .post-body h3 {
-    font-size: 120%;
+  font-size: 120%;
 }
 .table.followers tr {
-    border-bottom: 1px solid #e0e0e0;
-}
-/* add */
-blockquote {
-    padding-left: 6px;
-}
-pre {
-    padding-left: 8px;
-}
-/* _posts.html */
-#quote_l {
-    background: url(../static/quote_l.gif) no-repeat 0px 6px;
+  border-bottom: 1px solid #e0e0e0;
 }
 
-#quote_r {
-    padding: 12px;
-    background: url(../static/quote_r.gif) no-repeat right;
+/* add */
+blockquote {
+  padding-left: 6px;
 }
+pre {
+  padding-left: 8px;
+}
+
+/* _posts.html */
+#quote_l {
+  background: url(../static/quote_l.gif) no-repeat 0px 6px;
+}
+#quote_r {
+  padding: 12px;
+  background: url(../static/quote_r.gif) no-repeat right;
+}
+
 /* 不需要在_posts.html里引入style.css，因为引了_posts.html的posts.html从base.html继承，而后者里面引入了style.css */
 .index-article-avatar {
-    width: 30px;
-    height: 30px;
+  width: 30px;
+  height: 30px;
 }
+
 /* followers.html */
 .followers-avatar {
-    width: 23px;
-    height: 23px;    
+  width: 23px;
+  height: 23px;
 }
 .followed-by-avatar {
-    width: 23px;
-    height: 23px;    
+  width: 23px;
+  height: 23px;
 }
+
 /* _comments.html */
 .comments-avatar {
-    width: 30px;
-    height: 30px;
+  width: 30px;
+  height: 30px;
 }
+
 /* user.html */
 .profile-avatar {
-    width: 180px;
-    height: 180px;
+  width: 180px;
+  height: 180px;
 }
+
 /* article.html */
 .article-sidebar-margin-top {
-    margin-top: 15px;
+  margin-top: 15px;
 }
 #flask-pagedown-body {
-    height: 260px;
+  height: 260px;
 }
 .write-article-body {
-    padding: 15px;
+  padding: 15px;
 }
 p {
-    word-wrap: break-word;
+  word-wrap: break-word;
 }
+
 /* resume.html */
 #cd-vertical-nav li {
-    list-style:none;
+  list-style: none;
 }
 #section1 {
-    margin-top: -50px;
-    z-index: -1;
+  margin-top: -50px;
+  z-index: -1;
 }
+
 /* contact.html */
+
 /* html, body, .container-fluid {
-    height:100%;
-    width:100%;
+height:100%;
+width:100%;
 } */
 .contact-icons {
-    /* border: 2px solid black; */
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    text-align: center;
-    padding:20px;
-    -webkit-transform: translate(-50%, -50%);
-    -moz-transform: translate(-50%, -50%);
-    -ms-transform: translate(-50%, -50%);
-    -o-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+
+  /* border: 2px solid black; */
+  z-index: -1;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  text-align: center;
+  padding: 20px;
+  -webkit-transform: translate(-50%, -50%);
+  -moz-transform: translate(-50%, -50%);
+  -ms-transform: translate(-50%, -50%);
+  -o-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
 }
 .contact-icons a {
-    text-decoration: none;
+  text-decoration: none;
 }
 .iconfont {
-    display: inline-block;
+  display: inline-block;
 }
 .iconfont-github {
-    width: 50px;
-    height: 50px;
-    position: absolute;
-    left: -143px;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: -143px;
 }
 .iconfont-zhihu {
-    width: 53px;
-    height: 53px;
-    position: absolute;
-    left: -53px;
+  width: 53px;
+  height: 53px;
+  position: absolute;
+  left: -53px;
 }
 .iconfont-douban {
-    width: 57px;
-    height: 57px;
-    position: absolute;
-    left: 37px;
+  width: 57px;
+  height: 57px;
+  position: absolute;
+  left: 37px;
 }
 .iconfont-mail {
-    width: 57px;
-    height: 57px;
-    position: absolute;
-    left: 127px;
+  width: 57px;
+  height: 57px;
+  position: absolute;
+  left: 127px;
+}
+.div {
+  padding: 0;
+}
+
+/* -------------------------------- 
+
+smart-fixed-navigation
+
+-------------------------------- */
+@media only screen and (min-width:768px) {
+  #cd-nav.is-fixed ul {
+
+    /* when the user scrolls down, the navigation moves to the bottom right in Fixed position - as on touch devices */
+    position: fixed;
+    z-index: 3;
+    min-width: 130px;
+    max-width: 400px;
+    bottom: 25px;
+    right: 40px;
+    top: auto;
+    background: white;
+    visibility: hidden;
+    box-shadow: 0 0 10px #ddd;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    -o-transform: scale(0);
+    transform: scale(0);
+  }
+  #cd-nav.is-fixed ul li {
+    display: block;
+  }
+  #cd-nav.is-fixed ul li a {
+    padding: 14px;
+    margin-left: 0;
+    border-bottom: 1px solid #ddd;
+  }
+  #cd-nav.is-fixed ul li:last-child a {
+    border-bottom: none;
+  }
+  #cd-nav ul.has-transitions {
+
+    /* this class is used to bring back transitions when the navigation moves at the bottom right */
+    -webkit-transition: -webkit-transform 0.3s, visibility 0s 0.3s;
+    -moz-transition: -moz-transform 0.3s, visibility 0s 0.3s;
+    transition: transform 0.3s, visibility 0s 0.3s;
+  }
+  #cd-nav ul.is-visible {
+
+    /* this class is used to bring back the navigation animation - as on touch devices */
+    visibility: visible;
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: -webkit-transform 0.3s, visibility 0s 0s;
+    -moz-transition: -moz-transform 0.3s, visibility 0s 0s;
+    transition: transform 0.3s, visibility 0s 0s;
+  }
+  #cd-nav ul.is-visible li {
+    float: none;
+  }
+  #cd-nav ul.is-hidden {
+
+    /* this class is used to animate the scale down the navigation when the user scrolls down with the navigation still open */
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    -o-transform: scale(0);
+    transform: scale(0);
+    -webkit-transition: -webkit-transform 0.3s;
+    -moz-transition: -moz-transform 0.3s;
+    transition: transform 0.3s;
+  }
+}
+.cd-nav-trigger {
+  position: fixed;
+  z-index: 4;
+  bottom: 25px;
+  right: 40px;
+  width: 44px;
+  height: 44px;
+  background: white;
+  border-radius: 0.25em;
+  border: 1px solid #ddd;  /* image replacement */
+  overflow: hidden;
+  text-indent: 100%;
+  white-space: nowrap;
+  z-index: 2;
+}
+.cd-nav-trigger span {
+
+  /* the span element is used to create the menu icon */
+  position: absolute;
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: rgb(217, 83, 79);
+  top: 50%;
+  margin-top: -1px;
+  left: 50%;
+  margin-left: -10px;
+  -webkit-transition: background 0.3s;
+  -moz-transition: background 0.3s;
+  transition: background 0.3s;
+}
+.cd-nav-trigger span::before, .cd-nav-trigger span::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  background: inherit;
+  width: 100%;
+  height: 100%;  /* Force Hardware Acceleration in WebKit */
+  -webkit-transform: translateZ(0);
+  -moz-transform: translateZ(0);
+  -ms-transform: translateZ(0);
+  -o-transform: translateZ(0);
+  transform: translateZ(0);
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transition: -webkit-transform 0.3s, background 0s;
+  -moz-transition: -moz-transform 0.3s, background 0s;
+  transition: transform 0.3s, background 0s;
+}
+.cd-nav-trigger span::before {
+  top: -6px;
+  -webkit-transform: rotate(0);
+  -moz-transform: rotate(0);
+  -ms-transform: rotate(0);
+  -o-transform: rotate(0);
+  transform: rotate(0);
+}
+.cd-nav-trigger span::after {
+  bottom: -6px;
+  -webkit-transform: rotate(0);
+  -moz-transform: rotate(0);
+  -ms-transform: rotate(0);
+  -o-transform: rotate(0);
+  transform: rotate(0);
+}
+.cd-nav-trigger.menu-is-open {
+  border: none;
+  z-index:5;
+}
+.cd-nav-trigger.menu-is-open span {
+  background: rgba(232, 74, 100, 0);
+}
+.cd-nav-trigger.menu-is-open span::before, .cd-nav-trigger.menu-is-open span::after {
+  background: rgb(217, 83, 79);
+}
+.cd-nav-trigger.menu-is-open span::before {
+  top: 0;
+  -webkit-transform: rotate(135deg);
+  -moz-transform: rotate(135deg);
+  -ms-transform: rotate(135deg);
+  -o-transform: rotate(135deg);
+  transform: rotate(135deg);
+}
+.cd-nav-trigger.menu-is-open span::after {
+  bottom: 0;
+  -webkit-transform: rotate(225deg);
+  -moz-transform: rotate(225deg);
+  -ms-transform: rotate(225deg);
+  -o-transform: rotate(225deg);
+  transform: rotate(225deg);
+}
+@media only screen and (min-width:768px) {
+  .cd-nav-trigger {
+
+    /* the the menu triger is hidden by default on desktop devices */
+    visibility: hidden;
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    -o-transform: scale(0);
+    transform: scale(0);
+    -webkit-transition: -webkit-transform 0.3s, visibility 0s 0.3s;
+    -moz-transition: -moz-transform 0.3s, visibility 0s 0.3s;
+    transition: transform 0.3s, visibility 0s 0.3s;
+  }
+  .is-fixed .cd-nav-trigger {
+    visibility: visible;
+    -webkit-transition: all 0s;
+    -moz-transition: all 0s;
+    transition: all 0s;
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+    -webkit-animation: cd-bounce-in 0.3s linear;
+    -moz-animation: cd-bounce-in 0.3s linear;
+    animation: cd-bounce-in 0.3s linear;
+  }
+}
+@-webkit-keyframes cd-slide-in {
+  0% {
+    -webkit-transform: translateX(100px);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+  }
+}
+@-moz-keyframes cd-slide-in {
+  0% {
+    -moz-transform: translateX(100px);
+  }
+  100% {
+    -moz-transform: translateY(0);
+  }
+}
+@keyframes cd-slide-in {
+  0% {
+    -webkit-transform: translateX(100px);
+    -moz-transform: translateX(100px);
+    -ms-transform: translateX(100px);
+    -o-transform: translateX(100px);
+    transform: translateX(100px);
+  }
+  100% {
+    -webkit-transform: translateY(0);
+    -moz-transform: translateY(0);
+    -ms-transform: translateY(0);
+    -o-transform: translateY(0);
+    transform: translateY(0);
+  }
+}
+@-webkit-keyframes cd-bounce-in {
+  0% {
+    -webkit-transform: scale(0);
+  }
+  60% {
+    -webkit-transform: scale(1.2);
+  }
+  100% {
+    -webkit-transform: scale(1);
+  }
+}
+@-moz-keyframes cd-bounce-in {
+  0% {
+    -moz-transform: scale(0);
+  }
+  60% {
+    -moz-transform: scale(1.2);
+  }
+  100% {
+    -moz-transform: scale(1);
+  }
+}
+@keyframes cd-bounce-in {
+  0% {
+    -webkit-transform: scale(0);
+    -moz-transform: scale(0);
+    -ms-transform: scale(0);
+    -o-transform: scale(0);
+    transform: scale(0);
+  }
+  60% {
+    -webkit-transform: scale(1.2);
+    -moz-transform: scale(1.2);
+    -ms-transform: scale(1.2);
+    -o-transform: scale(1.2);
+    transform: scale(1.2);
+  }
+  100% {
+    -webkit-transform: scale(1);
+    -moz-transform: scale(1);
+    -ms-transform: scale(1);
+    -o-transform: scale(1);
+    transform: scale(1);
+  }
 }

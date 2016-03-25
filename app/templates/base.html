@@ -6,11 +6,6 @@
 {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
-<style type="text/css">
-    .div {
-        padding: 0;
-    }
-</style>
 {% endblock %}
 
 {% block navbar %}
@@ -26,17 +21,22 @@
             <a class="navbar-brand" href="{{ url_for('main.index') }}">YIYI</a>
         </div>
         <div class="navbar-collapse collapse">
-            <ul class="nav navbar-nav">
-                <li><a href="{{ url_for('main.index') }}">首页</a></li>
-                <!-- 把资料页面的链接包含在条件语句中是非常必要的,因为未认证的用户也能看到导航条,但我们不应该让他们看到资料页面的链接。 -->
-                <li><a href="{{ url_for('main.article') }}">文章</a></li>
-                <li><a href="{{ url_for('main.resume') }}">简历</a></li>
-                <li><a href="{{ url_for('main.lab') }}">实验室</a></li>
-                <li><a href="{{ url_for('main.contact') }}">联系我</a></li>
-                {% if current_user.is_authenticated %}
-                <li><a href="{{ url_for('main.user', username=current_user.username) }}">个人主页</a></li>
-                {% endif %}
-            </ul>
+            <div id="cd-nav">
+                <a href="#0" class="cd-nav-trigger">Menu<span></span></a>
+                <div id="cd-main-nav">
+                    <ul class="nav navbar-nav">
+                        <li><a href="{{ url_for('main.index') }}">首页</a></li>
+                        <!-- 把资料页面的链接包含在条件语句中是非常必要的,因为未认证的用户也能看到导航条,但我们不应该让他们看到资料页面的链接。 -->
+                        <li><a href="{{ url_for('main.article') }}">文章</a></li>
+                        <li><a href="{{ url_for('main.resume') }}">简历</a></li>
+                        <li><a href="{{ url_for('main.lab') }}">实验室</a></li>
+                        <li><a href="{{ url_for('main.contact') }}">联系我</a></li>
+                        {% if current_user.is_authenticated %}
+                        <li><a href="{{ url_for('main.user', username=current_user.username) }}">个人主页</a></li>
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
             <ul class="nav navbar-nav navbar-right">
                 <!-- 为了管理评论我们要在导航条中添加一个链接具有权限的用户才能看到。这个链接在base.html 模板中使用条件语句添加 -->
                 {% if current_user.can(Permission.MODERATE_COMMENTS) %}
@@ -51,7 +51,7 @@
                 {% if current_user.is_authenticated %}
                 <li class="dropdown">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        <img class="navbar-avatar" src="{{ current_user.avatar() }}">
+                        <img class="img-rounded navbar-avatar" src="{{ current_user.avatar() }}">
                         {{ current_user.username }} <b class="caret"></b>
                     </a>
                     <ul class="dropdown-menu">
@@ -89,12 +89,8 @@
 
 {% block scripts %}
 {{ super() }}
+<script type="text/javascript" src="{{ url_for('static', filename='modernizr.js') }}"></script>
 {{ moment.include_moment() }}
 {{ moment.lang('zh-cn') }}
 {{ pagedown.include_pagedown() }}
-<script type="text/javascript">
-$(document).ready(function(){
-    $("#submit").addClass("btn-primary");
-});
-</script>
 {% endblock %}
