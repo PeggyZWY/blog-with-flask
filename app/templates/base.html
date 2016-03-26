@@ -6,6 +6,7 @@
 {{ super() }}
 <link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}" type="image/x-icon">
 <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='styles.css') }}">
+<script type="text/javascript" src="{{ url_for('static', filename='modernizr.js') }}"></script>
 {% endblock %}
 
 {% block navbar %}
@@ -89,7 +90,6 @@
 
 {% block scripts %}
 {{ super() }}
-<script type="text/javascript" src="{{ url_for('static', filename='modernizr.js') }}"></script>
 {{ moment.include_moment() }}
 {{ moment.lang('zh-cn') }}
 {{ pagedown.include_pagedown() }}
