@@ -18,6 +18,7 @@ Jinja2==2.8
 Mako==1.0.4
 Markdown==2.6.5
 MarkupSafe==0.23
+PyMySQL==0.7.2
 python-editor==0.5
 six==1.10.0
 SQLAlchemy==1.0.12
