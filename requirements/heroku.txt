@@ -1,0 +1,5 @@
+-r prod.txt
+Flask-SSLify==0.1.4
+gunicorn==19.4.5
+psycopg2==2.5.1
+

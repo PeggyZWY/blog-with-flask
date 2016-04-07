@@ -28,16 +28,27 @@ def sort_category():
         category = sorted(dict, key=dict.__getitem__, reverse=True)
         return category
 
+# 报告缓慢的数据库查询
+"""
+这个功能使用 after_app_request 处理程序实现,它和 before_app_request 处理程序的工作方式类似,只不过在视图函数处理完请求之后执行。
+Flask 把响应对象传给 after_app_ request 处理程序,以防需要修改响应。
+在这里,after_app_request 处理程序没有修改响应,只是获取 Flask-SQLAlchemy 记录 的查询时间并把缓慢的查询写入日志。
 
+"""
 @main.after_app_request
 def after_request(response):
+    """
+    get_debug_queries() 函数返回一个列表,其元素是请求中执行的查询
+    遍历 get_debug_queries() 函数获取的列表,把持续时间比设定阈值长的查询写入日志。
+    写入的日志被设为“警告”等级。如果换成“错误”等级,发 现缓慢的查询时还会发送电子邮件。
+    """
     for query in get_debug_queries():
         if query.duration >= current_app.config['FLASKY_SLOW_DB_QUERY_TIME']:
             current_app.logger.warning(
                 'Slow query: %s\nParameters: %s\nDuration: %fs\nContext: %s\n'
                 % (query.statement, query.parameters, query.duration, query.context))
     return response
-    
+
 
 """
 Werkzeug Web 服务器本身就有停止选项,但由于服务器运行在单独的线程中,关闭服务器的唯一方法是发送一个普通的 HTTP 请求.

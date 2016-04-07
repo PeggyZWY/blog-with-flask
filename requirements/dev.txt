@@ -1,2 +1,4 @@
 -r common.txt
+coverage==4.0.3
 ForgeryPy==0.1
+selenium==2.53.1

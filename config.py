@@ -87,6 +87,22 @@ class ProductionConfig(Config):
         app.logger.addHandler(mail_handler)
 
 
+class HerokuConfig(ProductionConfig):
+    @classmethod
+    def init_app(cls, app):
+        ProductionConfig.init_app(app)
+
+        from werkzeug.contrib.fixers import ProxyFix
+        app.wsgi_app = ProxyFix(app.wsgi_app)
+
+        # 输出到 stderr
+        import logging
+        from logging import StreamHandler
+        file_handler = StreamHandler()
+        file_handler.setLevel(logging.WARNING)
+        app.logger.addHandler(file_handler)
+
+
 # config 字典中注册了不同的配置环境
 config = {
     'development': DevelopmentConfig,

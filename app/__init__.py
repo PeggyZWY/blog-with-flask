@@ -54,6 +54,9 @@ def create_app(config_name):
     pagedown.init_app(app)
     # sae_storage.init_app(app)
 
+    if not app.debug and not app.testing:
+        from flask.ext.sslify import SSLify
+        sslify = SSLify(app)
 
     # 还有附加路由和自定义的错误页面，下一节讲
     """
