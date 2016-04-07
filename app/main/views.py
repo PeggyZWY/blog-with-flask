@@ -27,6 +27,22 @@ def sort_category():
         category = sorted(dict, key=dict.__getitem__, reverse=True)
         return category
 
+"""
+Werkzeug Web 服务器本身就有停止选项,但由于服务器运行在单独的线程中,关闭服务器的唯一方法是发送一个普通的 HTTP 请求.
+
+只有当程序运行在测试环境中时,这个关闭服务器的路由才可用,在其他配置中调用时将不起作用。
+在实际过程中,关闭服务器时要调用 Werkzeug 在环境中提供的关闭函数。调用这个函数且请求处理完成后,开发服务器就知道自己需要优雅地退出了。
+"""
+@main.route('/shutdown')
+def server_shutdown():
+    if not current_app.testing:
+        abort(404)
+    shutdown = request.environ.get('werkzeug.server.shutdown')
+    if not shutdown:
+        abort(500)
+    shutdown()
+    return 'Shutting down...'
+
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
@@ -450,4 +466,27 @@ def contact():
 def lab():
     return render_template('lab.html')
 
+
+# # 保存文件到SAE Storage
+# @app.route('/save')
+# def save():
+#     data = 'data to save'
+#     filename = 'filename'
+#     ret = sae_storage.save(data, filename)
+#     return str(ret)
+
+
+# # 删除SAE Storage中的文件
+# @app.route('/delete')
+# def delete():
+#     filename = 'filename'
+#     ret = sae_storage.delete(filename)
+#     return str(ret)
+
+
+# # 根据文件名获取对应的公开URL
+# @app.route('/url')
+# def url():
+#     filename = 'filename'
+#     return sae_storage.url(filename)
 

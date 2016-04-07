@@ -13,6 +13,7 @@ from flask.ext.login import LoginManager
 from flask.ext.pagedown import PageDown
 # 配置类在 config.py 文件中定义
 from config import config
+# from flask_saestorage import SaeStorage
 
 import sys
 reload(sys)
@@ -25,6 +26,7 @@ mail = Mail()
 moment = Moment()
 db = SQLAlchemy()
 pagedown = PageDown()
+# sae_storage = SaeStorage()
 
 login_manager = LoginManager()
 # LoginManager 对象的 session_protection 属性可以设为 None、'basic' 或 'strong'
@@ -50,6 +52,7 @@ def create_app(config_name):
     db.init_app(app)
     login_manager.init_app(app)
     pagedown.init_app(app)
+    # sae_storage.init_app(app)
 
 
     # 还有附加路由和自定义的错误页面，下一节讲

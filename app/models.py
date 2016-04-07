@@ -363,9 +363,9 @@ class Post(db.Model):
             通过设定一个随机的偏移值,再调用 first() 方法,就能每次都获得一个不同的随机用户。
             """
             u = User.query.offset(randint(0, user_count - 1)).first()
-            p = Post(title=forgery_py.lorem_ipsum.sentence(randint(1, 3)),
-                     intro=forgery_py.lorem_ipsum.sentence(randint(1, 3)),
-                     body=forgery_py.lorem_ipsum.sentence(randint(1, 3)),
+            p = Post(title=forgery_py.lorem_ipsum.sentences(randint(1, 3)),
+                     intro=forgery_py.lorem_ipsum.sentences(randint(1, 3)),
+                     body=forgery_py.lorem_ipsum.sentences(randint(1, 3)),
                      timestamp=forgery_py.date.date(True),
                      author=u)
             db.session.add(p)
