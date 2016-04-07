@@ -71,5 +71,21 @@ def profile(length=25, profile_dir=None):
     app.run()
 
 
+@manager.command
+def deploy():
+    from flask.ext.migrate import upgrade
+    from app.models import Role, User
+
+    # 定义这些函数时考虑到了多次执行的情况,所以即使多次执行也不会产生问题。因此每次安装或升级程序时只需运行 deploy 命令就能完成所有操作。
+    # 把数据库迁移到最新修订版本
+    upgrade()
+
+    # 创建用户角色
+    Role.insert_roles
+
+    # 让所有用户都关注此用户
+    User.add_self_follows()
+
+
 if __name__ == '__main__':
     manager.run()
