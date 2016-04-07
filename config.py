@@ -20,6 +20,10 @@ class Config(object):
     FLASKY_POSTS_PER_PAGE = 10
     FLASKY_FOLLOWERS_PER_PAGE = 20
     FLASKY_COMMENTS_PER_PAGE = 10
+    # SQLALCHEMY_RECORD_QUERIES 告诉 Flask-SQLAlchemy 启用记录查询统计数字的功能。
+    # 缓慢查询的阈值设为 0.5 秒。这两个配置变量都在 Config 基类中设置,因此在所有环境中都可使用。
+    SQLALCHEMY_RECORD_QUERIES = True
+    FLASKY_SLOW_DB_QUERY_TIME = 0.5
 
     """
     配置类可以定义 init_app() 类方法,其参数是程序实例。在这个方法中,可以执行对当前环境的配置初始化。

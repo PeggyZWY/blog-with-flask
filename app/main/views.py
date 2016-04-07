@@ -3,6 +3,7 @@
 # 11d 准备过程中加了request & current_app, 12d 准备过程中加了make_response
 from flask import render_template, redirect, url_for, abort, flash, request, current_app, make_response
 from flask.ext.login import login_required, current_user
+from flask.ext.sqlalchemy import get_debug_queries
 from . import main
 from ..models import Role, User, Permission, Post, Comment, Category
 from .. import db
@@ -26,6 +27,17 @@ def sort_category():
                 dict[i] = count
         category = sorted(dict, key=dict.__getitem__, reverse=True)
         return category
+
+
+@main.after_app_request
+def after_request(response):
+    for query in get_debug_queries():
+        if query.duration >= current_app.config['FLASKY_SLOW_DB_QUERY_TIME']:
+            current_app.logger.warning(
+                'Slow query: %s\nParameters: %s\nDuration: %fs\nContext: %s\n'
+                % (query.statement, query.parameters, query.duration, query.context))
+    return response
+    
 
 """
 Werkzeug Web 服务器本身就有停止选项,但由于服务器运行在单独的线程中,关闭服务器的唯一方法是发送一个普通的 HTTP 请求.

@@ -3,7 +3,7 @@
 
 import os
 from app import create_app, db
-from app.models import User, Role, Permission, Post
+from app.models import User, Follow, Role, Permission, Post, Comment
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -59,6 +59,16 @@ def test(coverage=False):
         COV.html_report(directory=covdir)
         print('HTML version: file://%s/index.html' % covdir)
         COV.erase()
+
+
+# 启动分析器,在请求分析器的监视下运行程序
+@manager.command
+# 使用 python manage.py profile 启动程序后,终端会显示每条请求的分析数据,其中包含运行最慢的 25 个函数。--length 选项可以修改报告中显示的函数数量
+# 如果指定了--profile-dir 选项,每条请求的分析数据就会保存到指定目录下的一个文件中
+def profile(length=25, profile_dir=None):
+    from werkzeug.contrib.profiler import ProfilerMiddleware
+    app.wsgi_app = ProfilerMiddleware(app.wsgi_app, restrictions=[length], profile_dir=profile_dir)
+    app.run()
 
 
 if __name__ == '__main__':
