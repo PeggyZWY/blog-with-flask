@@ -2,6 +2,9 @@
   
 [我也有个人博客啦ヾ (o ° ω ° O ) ノ゙点击进入](https://peggyzwy.herokuapp.com/)  
   
+扫一扫二维码配合手机食用也不错哦~  
+![QR_Code_for_website](QR_Code_for_website.png)  
+  
 ## 说明  
 部署在 Heroku 上的，打开略慢(服务器都在国外)。  
   
