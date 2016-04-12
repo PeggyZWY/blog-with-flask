@@ -5,7 +5,7 @@ from flask import render_template, redirect, url_for, abort, flash, request, cur
 from flask.ext.login import login_required, current_user
 from flask.ext.sqlalchemy import get_debug_queries
 from . import main
-from ..models import Role, User, Permission, Post, Comment, Category
+from ..models import Role, User, Permission, Post, Comment, Category, HomePage
 from .. import db
 from .forms import EditProfileForm, EditProfileAdminForm, PostForm, CommentForm
 from ..decorators import admin_required, permission_required
@@ -23,6 +23,7 @@ def sort_category():
             count = i.posts.count()
             if count == 0:
                 db.session.delete(i)
+                db.session.commit()
             else:
                 dict[i] = count
         category = sorted(dict, key=dict.__getitem__, reverse=True)
@@ -69,6 +70,20 @@ def server_shutdown():
 
 @main.route('/', methods=['GET', 'POST'])
 def index():
+    homepages = HomePage.query.filter_by(id=1).first()
+    if not homepages:
+        homepages = HomePage(view_times=1)
+        db.session.add(homepages)
+        db.session.commit()
+    try:
+        if homepages.view_times > 0:
+            homepages.view_times = homepages.view_times + 1
+        else:
+            homepages.view_times = 1
+        db.session.add(homepages)
+        db.session.commit()
+    except:
+        pass
     return render_template('index.html')
 
 
@@ -91,6 +106,7 @@ def edit_profile():
         current_user.location = form.location.data
         current_user.about_me = form.about_me.data
         db.session.add(current_user)
+        db.session.commit()
         flash('资料已更新 (｡・`ω´･)')
         return redirect(url_for('.user', username=current_user.username))
     # 为所有字段设定了初始值
@@ -117,6 +133,7 @@ def edit_profile_admin(id):
         user.location = form.location.data
         user.about_me = form.about_me.data
         db.session.add(user)
+        db.session.commit()
         flash('资料已更新 (｡・`ω´･)')
         return redirect(url_for('.user', username=user.username))
     form.email.data = user.email
@@ -161,9 +178,10 @@ def post(id):
         # 和 Post 模型一样,评论的 author 字段也不能直接设为 current_user,因为这个变量是上下文代理对象。真正的 User 对象要 使用表达式 current_user._get_current_object() 获取。
         comment = Comment(body=form.body.data, post=post, author=current_user._get_current_object())
         db.session.add(comment)
+        db.session.commit()
         flash('评论已提交 (｡・`ω´･)')
         # 提交评论后,请求结果是一个重定 向,转回之前的 URL,但是在 url_for() 函数的参数中把 page 设为 -1,这是个特殊的页 数,用来请求评论的最后一页,所以刚提交的评论才会出现在页面中。
-        return redirect(url_for('.post', id=post.id, page=-1))
+        return redirect(url_for('.post', id=post.id))
     # 程序从查询字符串 中获取页数,发现值为 -1 时,会计算评论的总量和总页数,得出真正要显示的页数。
     page = request.args.get('page', 1, type=int)
     if page == -1:
@@ -176,6 +194,12 @@ def post(id):
         error_out=False)
     comments = pagination.items
     category = sort_category()
+    if post.view_times > 0:
+        post.view_times = post.view_times + 1
+    else:
+        post.view_times = 1
+    db.session.add(post)
+    db.session.commit()
     # 评论列表对象和分页对象都传入了模板,以便渲染。
     return render_template('post.html', posts=[post], form=form, categories=category, comments=comments, pagination=pagination)
     # 评论的渲染过程在新模板 _comments.html 中进行,类似于 _posts.html,但使用的 CSS 类不 同。_comments.html 模板要引入 post.html 中,放在文章正文下方,后面再显示分页导航。
@@ -213,6 +237,7 @@ def edit(id):
             else:
                 post.category_id = category_name_exists.id
         db.session.add(post)
+        db.session.commit()
         flash('文章已提交 (｡・`ω´･)')
         return redirect(url_for('.post', id=post.id))
     form.title.data = post.title
@@ -341,6 +366,7 @@ def moderate_enable(id):
     comment = Comment.query.get_or_404(id)
     comment.disabled = False
     db.session.add(comment)
+    db.session.commit()
     return redirect(url_for('.moderate', page=request.args.get('page', 1 ,type=int)))
 
 
@@ -351,6 +377,7 @@ def moderate_disable(id):
     comment = Comment.query.get_or_404(id)
     comment.disabled = True
     db.session.add(comment)
+    db.session.commit()
     return redirect(url_for('.moderate', page=request.args.get('page', 1, type=int)))
 
 
@@ -368,6 +395,7 @@ def article_new():
         post = Post(title=form.title.data, intro=form.intro.data, body=form.body.data, 
             author=current_user._get_current_object())
         db.session.add(post)
+        db.session.commit()
         if form.category_name.data:
             category = Category(category_name=form.category_name.data)
             db.session.add(category)
@@ -461,6 +489,7 @@ def delete_article(id):
     if not current_user.can(Permission.ADMINISTER):
         abort(403)
     db.session.delete(post)
+    db.session.commit()
     flash('你已成功删除了文章《%s》' % post.title)
     return redirect(url_for('.article'))
 
@@ -471,6 +500,7 @@ def delete_article(id):
 def delete_comment(id):
     comment = Comment.query.get_or_404(id)
     db.session.delete(comment)
+    db.session.commit()
     flash('你已成功删除了文章《%s》的评论"%s"' % (comment.comment_of_which_post, comment.body))
     return redirect(url_for('.moderate', page=request.args.get('page', 1 ,type=int)))
 

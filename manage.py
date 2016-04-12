@@ -3,7 +3,7 @@
 
 import os
 from app import create_app, db
-from app.models import User, Follow, Role, Permission, Post, Comment
+from app.models import User, Follow, Role, Permission, Post, Comment, HomePage
 from flask.ext.script import Manager, Shell
 from flask.ext.migrate import Migrate, MigrateCommand
 
@@ -81,7 +81,7 @@ def deploy():
     upgrade()
 
     # 创建用户角色
-    Role.insert_roles
+    Role.insert_roles()
 
     # 让所有用户都关注此用户
     User.add_self_follows()

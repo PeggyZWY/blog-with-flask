@@ -349,6 +349,7 @@ class Post(db.Model):
     author_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     comments = db.relationship('Comment', backref='post', lazy='dynamic', cascade='all, delete-orphan')
     category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
+    view_times = db.Column(db.Integer)
 
     @property
     def category_name(self):
@@ -466,3 +467,7 @@ class Category(db.Model):
     posts = db.relationship('Post', backref='category', lazy='dynamic')   
 
 
+class HomePage(db.Model):
+    __tablename__ = 'homepages' 
+    id = db.Column(db.Integer, primary_key=True)
+    view_times = db.Column(db.Integer)

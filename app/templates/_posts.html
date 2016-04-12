@@ -11,7 +11,7 @@
             <div class="post-author"><a href="{{ url_for('.user', username=post.author.username) }}">{{ post.author.username }}</a></div>
             <div>
                  <!-- 如果 post.body_html 字段存在,还要把 post.body 换成 post.body_html -->
-                <h2><a href="{{ url_for('.post', id=post.id, page=-1) }}">{{ post.title }}</a></h2>
+                <h2><a href="{{ url_for('.post', id=post.id) }}">{{ post.title }}</a></h2>
                 {% if post.intro %}
                 <p id="quote_l">
                     <big id="quote_r">
@@ -70,6 +70,9 @@
                 -->
                 <a href="{{ url_for('.post', id=post.id) }}#comments">
                     <span class="label label-primary">{{ post.comments.count() }}条评论</span>
+                </a>
+                <a href="{{ url_for('.post', id=post.id) }}">
+                    <span class="label label-default">{{ post.view_times }}次阅读</span>
                 </a>
             </div>
         </div>
